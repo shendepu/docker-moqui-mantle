@@ -1,0 +1,30 @@
+version: '2'
+services:
+  server-qa:
+    command: /bin/bash -c "/wait && catalina.sh run"
+    restart: always
+    image: shendepu/moqui-mantle:latest
+    depends_on:
+     - db-qa
+    links:
+     - db-qa
+    volumes:
+     - ./my-component:/usr/local/tomcat/webapps/ROOT/runtime/component/my-component
+    ports:
+     - 6000:8080
+    environment:
+     - TZ=Asia/Shanghai
+     - _TCP_ADDR=db-qa
+     - _TCP_PORT=3306
+
+  db-qa:
+    restart: always
+    image: mariadb:latest
+    volumes:
+     - ./conf.d/mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf
+    environment:
+     - TZ=Asia/Shanghai
+     - MYSQL_ROOT_PASSWORD=hV9nVjQcKFtQyx3Y
+     - MYSQL_DATABASE=MoquiDEFAULT
+     - MYSQL_USER=moqui
+     - MYSQL_PASSWORD=moqui
