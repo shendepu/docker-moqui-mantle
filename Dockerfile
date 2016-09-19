@@ -9,6 +9,7 @@ RUN set -x \
     && apt-get install --quiet --yes --no-install-recommends libtcnative-1 xmlstarlet netcat \
     && apt-get clean
 
+ADD java /usr/local/java
 ADD moqui-plus-runtime.war $CATALINA_HOME/webapps/ROOT.war
 
 RUN set -x \
@@ -18,6 +19,8 @@ RUN set -x \
 
 COPY "docker-entrypoint.sh" "/"
 COPY "wait" "/"
+
+ENV JAVA_HOME /usr/local/java
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
